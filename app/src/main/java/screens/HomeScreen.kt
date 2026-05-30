@@ -72,8 +72,6 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // 1. Daftar materi dibungkus dengan weight(1f) agar mengambil sisa ruang yang ada
-        // dan mendorong tombol di bawahnya untuk tetap berada di paling bawah layar.
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
@@ -81,6 +79,8 @@ fun HomeScreen(
                 MaterialCard(
                     material = material,
                     onClick = {
+                        // Mengirim string judul ("Algoritma Dasar" / "Basis Data" / "Jaringan Komputer")
+                        // ke AppNavigation untuk dibawa menuju DetailMateriScreen
                         onMaterialClick(material.title)
                     }
                 )
@@ -90,13 +90,12 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 2. Tombol Riwayat Nilai sekarang dipindahkan ke paling bawah
         Button(
             onClick = {
                 onHistoryClick()
             },
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF475569)) // Mengubah warna tombol agar serasi dengan tema gelap
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF475569))
         ) {
             Text(
                 text = "Lihat Riwayat Nilai",

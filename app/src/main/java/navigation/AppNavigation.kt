@@ -2,11 +2,14 @@ package com.example.studyhub.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.studyhub.screens.*
 import com.example.studyhub.viewmodel.HistoryViewModel
+
 
 @Composable
 fun AppNavigation() {
@@ -24,10 +27,32 @@ fun AppNavigation() {
 
         composable("home") {
             HomeScreen(
-                onMaterialClick = { materi -> navController.navigate("quiz/$materi") },
+                onMaterialClick = { materi ->
+                    // UBAH DI SINI: Sekarang jalurnya mampir ke detail materi dulu, bukan langsung ke quiz
+                    navController.navigate("detail_materi/$materi")
+                },
                 onHistoryClick = {
                     // Masuk ke history tanpa membawa data baru (hanya melihat yang ada)
                     navController.navigate("history")
+                }
+            )
+        }
+
+        // --- HALAMAN BARU: DETAIL MATERI (PERANTARA) ---
+        composable(
+            route = "detail_materi/{materi}",
+            arguments = listOf(navArgument("materi") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val materi = backStackEntry.arguments?.getString("materi") ?: ""
+            DetailMateriScreen(
+                materiName = materi,
+                onStartQuiz = {
+                    // Dari detail materi, barulah kita lanjut ke halaman quiz sesungguhnya
+                    navController.navigate("quiz/$materi")
+                },
+                onBack = {
+                    // Jika batal membaca materi, kembali ke Home
+                    navController.popBackStack()
                 }
             )
         }
